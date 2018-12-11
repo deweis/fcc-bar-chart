@@ -2,3 +2,7 @@ body {
   font-family: 'Roboto', sans-serif;
   text-align: center;
 }
+
+svg {
+  background: #e8eaf6; /* indigo lighten-5 */
+}
