@@ -8,7 +8,7 @@ fetch(
     return response.json();
   })
   .then(function(myJson) {
-    console.log('data fetched');
+    //console.log('data fetched');
     fccData = myJson; //JSON.stringify(myJson);
     //console.log(fccData.data[0]);
   });
@@ -19,19 +19,29 @@ const dataSet = [
   ['1947-04-01', 246.3],
   ['1947-07-01', 250.1],
   ['1947-10-01', 260.3],
-  ['1948-01-01', 266.2]
+  ['1948-01-01', 266.2],
+  ['2014-10-01', 17615.9],
+  ['2015-01-01', 17649.3],
+  ['2015-04-01', 17913.7],
+  ['2015-07-01', 18064.7]
 ];
 
-const dataSetValues = dataSet.map(x => x[1]);
-console.log(dataSetValues);
-
-const dataSetText = dataSet.map(x => x[0]);
-console.log(dataSetText);
-
-const svgWidth = 500, // the width of the svg container
-  svgHeight = 300, // the height of the svg container
+const svgWidth = 600, // the width of the svg container
+  svgHeight = 400, // the height of the svg container
   barPadding = 5, // the padding between the bars
-  barWidth = svgWidth / dataSet.length; // give equal width to every bar based on the container width;
+  scalePadding = 50,
+  barWidth = (svgWidth - 1.2 * scalePadding) / dataSet.length; // give equal width to every bar based on the container width;
+
+/* configure the scales */
+/*const xScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(barChartData)])
+  .range([0, svgWidth]);*/
+
+const yScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(dataSet, d => d[1])]) // The domain covers the set of input values
+  .range([svgHeight - scalePadding, scalePadding / 2]); // The range covers the set of output values*/
 
 /* configure the svg container */
 const svg = d3
@@ -45,22 +55,18 @@ const barChart = svg
   .data(dataSet)
   .enter()
   .append('rect') // The origin point of (0, 0) is in the upper-left corner.
-  .attr('y', d => svgHeight - d[1]) // Positive values for y push the shape down from the origin point
-  .attr('x', (d, i) => barWidth * i) // Positive values for x push the shape to the right
+  .attr('y', d => yScale(d[1])) // Positive values for y push the shape down from the origin point
+  .attr('x', (d, i) => scalePadding + barWidth * i) // Positive values for x push the shape to the right
   .attr('width', barWidth - barPadding)
-  .attr('height', d => d[1])
+  .attr('height', d => svgHeight - yScale(d[1]) - scalePadding)
   .attr('fill', '#3949ab') //  The bar colors (Here: indigo darken-1)
   .attr('class', 'bar') // add hovering effect (managed in css)
   .append('title') // add tooltip
   .text(d => `${d[0]}: ${d[1]} Billion`);
 
-/*
-.selectAll('rect') // bars are basically nothing else than rectangles (returns an empty selection here)
-.data(barChartData) // call the data method and provide it the dataset. I.e. will put the data in waiting state for further processing
-.enter() // will put the data in waiting state for further processing. It takes the data from the waiting state and performs the following operations on each data item.
-.append('rect') // appends a rectangle inside the svg container
-.attr('y', d => svgHeight - yScale(d)) // the upper left point of the bar
-.attr('height', d => yScale(d)) // the height to fill the bar
-.attr('width', barWidth - barPadding) // the width plus some padding between the bars
-.attr('transform', (d, i) => `translate(${[barWidth * i, 0]})`); // to put the bars next to each other
-*/
+const yAxis = d3.axisLeft(yScale);
+
+svg
+  .append('g')
+  .attr('transform', 'translate(' + scalePadding + ',0)')
+  .call(yAxis);
