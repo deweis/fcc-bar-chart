@@ -15,7 +15,6 @@ d3.select('#pExample') // select the body element
   Example on creating a simple bar chart
 **************************************************************************************************/
 const barChartData = [80, 100, 56, 120, 180, 30, 40, 120, 160], // the dataset
-  //const barChartData = [3, 5, 2],
   svgWidth = 500, // the width of the svg container
   svgHeight = 300, // the height of the svg container
   barPadding = 5, // the padding between the bars
@@ -28,10 +27,31 @@ const svg = d3
   .attr('height', svgHeight);
 
 /* configure the scales */
+const xScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(barChartData)])
+  .range([0, svgWidth]);
+
 const yScale = d3
   .scaleLinear()
   .domain([0, d3.max(barChartData) * 1.1])
   .range([0, svgHeight]);
+
+/* configure the axes */
+const x_axis = d3.axisBottom().scale(xScale);
+const y_axis = d3.axisLeft().scale(yScale);
+
+svg
+  .append('g') // append a group element
+  .attr('transform', 'translate(50, 10)') // translate(toRight, toDown)
+  .call(y_axis);
+
+const xAxisTranslate = svgHeight - 20;
+
+svg
+  .append('g') // append a group element
+  .attr('transform', `translate(50, ${xAxisTranslate})`)
+  .call(x_axis);
 
 /* configure the chart */
 const barChart = svg
