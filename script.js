@@ -30,7 +30,7 @@ const svg = d3
 /* configure the scales */
 const yScale = d3
   .scaleLinear()
-  .domain([0, d3.max(barChartData)])
+  .domain([0, d3.max(barChartData) * 1.1])
   .range([0, svgHeight]);
 
 /* configure the chart */
