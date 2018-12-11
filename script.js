@@ -26,6 +26,7 @@ const svg = d3
   .attr('width', svgWidth)
   .attr('height', svgHeight);
 
+/* configure the chart */
 const barChart = svg
   .selectAll('rect') // bars are basically nothing else than rectangles (returns an empty selection here)
   .data(barChartData) // call the data method and provide it the dataset. I.e. will put the data in waiting state for further processing
@@ -35,5 +36,15 @@ const barChart = svg
   .attr('height', d => d) // the height to fill the bar
   .attr('width', barWidth - barPadding) // the width plus some padding between the bars
   .attr('transform', (d, i) => `translate(${[barWidth * i, 0]})`); // to put the bars next to each other
+
+/* configure the labels */
+const text = svg
+  .selectAll('text')
+  .data(barChartData)
+  .enter()
+  .append('text')
+  .text(d => d)
+  .attr('y', d => svgHeight - d - 2)
+  .attr('x', (d, i) => barWidth * i);
 
 // Proceed on 11:16 of https://www.youtube.com/watch?v=C4t6qfHZ6Tw
