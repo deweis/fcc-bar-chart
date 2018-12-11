@@ -15,6 +15,7 @@ d3.select('#pExample') // select the body element
   Example on creating a simple bar chart
 **************************************************************************************************/
 const barChartData = [80, 100, 56, 120, 180, 30, 40, 120, 160], // the dataset
+  //const barChartData = [3, 5, 2],
   svgWidth = 500, // the width of the svg container
   svgHeight = 300, // the height of the svg container
   barPadding = 5, // the padding between the bars
@@ -26,14 +27,20 @@ const svg = d3
   .attr('width', svgWidth)
   .attr('height', svgHeight);
 
+/* configure the scales */
+const yScale = d3
+  .scaleLinear()
+  .domain([0, d3.max(barChartData)])
+  .range([0, svgHeight]);
+
 /* configure the chart */
 const barChart = svg
   .selectAll('rect') // bars are basically nothing else than rectangles (returns an empty selection here)
   .data(barChartData) // call the data method and provide it the dataset. I.e. will put the data in waiting state for further processing
   .enter() // will put the data in waiting state for further processing. It takes the data from the waiting state and performs the following operations on each data item.
   .append('rect') // appends a rectangle inside the svg container
-  .attr('y', d => svgHeight - d) // the upper left point of the bar
-  .attr('height', d => d) // the height to fill the bar
+  .attr('y', d => svgHeight - yScale(d)) // the upper left point of the bar
+  .attr('height', d => yScale(d)) // the height to fill the bar
   .attr('width', barWidth - barPadding) // the width plus some padding between the bars
   .attr('transform', (d, i) => `translate(${[barWidth * i, 0]})`); // to put the bars next to each other
 
@@ -44,7 +51,7 @@ const text = svg
   .enter()
   .append('text')
   .text(d => d)
-  .attr('y', d => svgHeight - d - 2)
+  .attr('y', d => svgHeight - yScale(d) - 2)
   .attr('x', (d, i) => barWidth * i);
 
 // Proceed on 11:16 of https://www.youtube.com/watch?v=C4t6qfHZ6Tw
