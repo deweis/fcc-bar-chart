@@ -6,3 +6,7 @@ body {
 svg {
   background: #e8eaf6; /* indigo lighten-5 */
 }
+
+.bar:hover {
+  fill: #9fa8da; /*   indigo lighten-3 */
+}

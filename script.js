@@ -46,7 +46,8 @@ const barChart = svg
   .attr('x', (d, i) => barWidth * i) // Positive values for x push the shape to the right
   .attr('width', barWidth - barPadding)
   .attr('height', d => d)
-  .attr('fill', '#3949ab'); //  The bar colors (Here: indigo darken-1)
+  .attr('fill', '#3949ab') //  The bar colors (Here: indigo darken-1)
+  .attr('class', 'bar'); // add hovering effect (managed in css)
 
 /*
 .selectAll('rect') // bars are basically nothing else than rectangles (returns an empty selection here)
