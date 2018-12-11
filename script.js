@@ -22,8 +22,11 @@ const dataSet = [
   ['1948-01-01', 266.2]
 ];
 
-const dataSetReduced = dataSet.map(x => x[1]);
-console.log(dataSetReduced);
+const dataSetValues = dataSet.map(x => x[1]);
+console.log(dataSetValues);
+
+const dataSetText = dataSet.map(x => x[0]);
+console.log(dataSetText);
 
 const svgWidth = 500, // the width of the svg container
   svgHeight = 300, // the height of the svg container
@@ -39,15 +42,17 @@ const svg = d3
 /* configure the chart */
 const barChart = svg
   .selectAll('rect')
-  .data(dataSetReduced)
+  .data(dataSet)
   .enter()
   .append('rect') // The origin point of (0, 0) is in the upper-left corner.
-  .attr('y', d => svgHeight - d) // Positive values for y push the shape down from the origin point
+  .attr('y', d => svgHeight - d[1]) // Positive values for y push the shape down from the origin point
   .attr('x', (d, i) => barWidth * i) // Positive values for x push the shape to the right
   .attr('width', barWidth - barPadding)
-  .attr('height', d => d)
+  .attr('height', d => d[1])
   .attr('fill', '#3949ab') //  The bar colors (Here: indigo darken-1)
-  .attr('class', 'bar'); // add hovering effect (managed in css)
+  .attr('class', 'bar') // add hovering effect (managed in css)
+  .append('title') // add tooltip
+  .text(d => `${d[0]}: ${d[1]} Billion`);
 
 /*
 .selectAll('rect') // bars are basically nothing else than rectangles (returns an empty selection here)
