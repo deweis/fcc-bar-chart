@@ -49,6 +49,8 @@ function updateChart(dataSet) {
     .attr('height', d => svgHeight - yScale(d[1]) - scalePadding)
     .attr('fill', '#3949ab') //  The bar colors (Here: indigo darken-1)
     .attr('class', 'bar') // add hovering effect (managed in css)
+    .attr('data-date', d => d[0])
+    .attr('data-gdp', d => d[1])
     .append('title') // add tooltip
     .text(d => `${d[0]}: ${d[1]} Billion`);
 
