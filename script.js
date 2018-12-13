@@ -11,17 +11,20 @@ fetch(
 
 /********** Create the chart *********/
 function updateChart(dataSet) {
-  const svgWidth = 1000, // the width of the svg container
+  const svgWidth = 940, // the width of the svg container
     svgHeight = 600, // the height of the svg container
     barPadding = 1, // the padding between the bars
     scalePadding = 50,
     barWidth = (svgWidth - 1.2 * scalePadding) / dataSet.length; // give equal width to every bar based on the container width;
 
   /* configure the scales */
-  /*const xScale = d3
-  .scaleLinear()
-  .domain([0, d3.max(barChartData)])
-  .range([0, svgWidth]);*/
+  const xScale = d3
+    .scaleLinear()
+    .domain([
+      d3.min(dataSet, d => d[0].substr(0, 4)),
+      d3.max(dataSet, d => d[0].substr(0, 4))
+    ])
+    .range([0, svgWidth - 1.4 * scalePadding]);
 
   const yScale = d3
     .scaleLinear()
@@ -49,12 +52,24 @@ function updateChart(dataSet) {
     .append('title') // add tooltip
     .text(d => `${d[0]}: ${d[1]} Billion`);
 
-  /* configure the axis */
+  /* Configure the axis */
   const yAxis = d3.axisLeft(yScale);
+  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format(''));
 
+  /* Place the y-axis */
   svg
     .append('g')
     .attr('id', 'y-axis')
     .attr('transform', 'translate(' + scalePadding + ',0)')
     .call(yAxis);
+
+  /* Place the x-axis */
+  svg
+    .append('g')
+    .attr('id', 'x-axis')
+    .attr(
+      'transform',
+      'translate(' + scalePadding + ', ' + (svgHeight - scalePadding) + ')'
+    )
+    .call(xAxis);
 }
