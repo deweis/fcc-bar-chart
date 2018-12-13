@@ -14,7 +14,7 @@ function updateChart(dataSet) {
   const svgWidth = 940, // the width of the svg container
     svgHeight = 600, // the height of the svg container
     barPadding = 1, // the padding between the bars
-    scalePadding = 50,
+    scalePadding = 50, // the padding of the chart within the svg
     barWidth = (svgWidth - 1.2 * scalePadding) / dataSet.length; // give equal width to every bar based on the container width;
 
   /* configure the scales */
@@ -61,6 +61,7 @@ function updateChart(dataSet) {
     .attr('data-date', d => d[0])
     .attr('data-gdp', d => d[1])
     .on('mouseover', d => {
+      /* Show the tooltip when hovering */
       const amount = d[1].toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD'
@@ -78,6 +79,7 @@ function updateChart(dataSet) {
         .style('top', d3.event.pageY - 35 + 'px');
     })
     .on('mouseout', d => {
+      /* Hide the tooltip when hovering out */
       divTooltip
         .transition()
         .duration(500)
@@ -92,6 +94,7 @@ function updateChart(dataSet) {
   svg
     .append('g')
     .attr('id', 'y-axis')
+    .attr('class', 'axis')
     .attr('transform', 'translate(' + scalePadding + ',0)')
     .call(yAxis);
 
@@ -99,6 +102,7 @@ function updateChart(dataSet) {
   svg
     .append('g')
     .attr('id', 'x-axis')
+    .attr('class', 'axis')
     .attr(
       'transform',
       'translate(' + scalePadding + ', ' + (svgHeight - scalePadding) + ')'

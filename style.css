@@ -3,15 +3,19 @@ body {
   text-align: center;
 }
 
-svg {
-  background: #e8eaf6; /* indigo lighten-5 */
+h1 {
+  color: #616161; /* grey darken-2 */
 }
 
 .bar:hover {
-  fill: #9fa8da; /*   indigo lighten-3 */
+  fill: #9fa8da; /* indigo lighten-3 */
 }
 
-div.tooltip {
+.axis {
+  color: #757575; /* grey darken-1 */
+}
+
+.tooltip {
   position: absolute;
   text-align: center;
   line-height: 1.5em;
