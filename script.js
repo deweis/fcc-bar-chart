@@ -37,6 +37,15 @@ function updateChart(dataSet) {
     .attr('width', svgWidth)
     .attr('height', svgHeight);
 
+  /* Define the div for the tooltip 
+      Thank you: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369  */
+  const divTooltip = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .attr('id', 'tooltip')
+    .style('opacity', 0);
+
   /* configure the chart */
   const barChart = svg
     .selectAll('rect')
@@ -51,10 +60,31 @@ function updateChart(dataSet) {
     .attr('class', 'bar') // add hovering effect (managed in css)
     .attr('data-date', d => d[0])
     .attr('data-gdp', d => d[1])
-    .append('title') // add tooltip
-    .text(d => `${d[0]}: ${d[1]} Billion`);
+    .on('mouseover', d => {
+      const amount = d[1].toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      });
 
-  /* Configure the axis */
+      divTooltip
+        .attr('data-date', d[0])
+        .transition()
+        .duration(200)
+        .style('opacity', 0.9);
+
+      divTooltip
+        .html(`${d[0]} <br> ${amount} Billion`)
+        .style('left', d3.event.pageX + 10 + 'px')
+        .style('top', d3.event.pageY - 35 + 'px');
+    })
+    .on('mouseout', d => {
+      divTooltip
+        .transition()
+        .duration(500)
+        .style('opacity', 0);
+    });
+
+  /* Configure the axes */
   const yAxis = d3.axisLeft(yScale);
   const xAxis = d3.axisBottom(xScale).tickFormat(d3.format(''));
 
