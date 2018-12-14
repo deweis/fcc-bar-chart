@@ -1,7 +1,5 @@
 /*
 - fully understand the code
-- Add axis description
-- Add source information (on bottom right)
 - Make it responsive
 */
 
@@ -54,7 +52,7 @@ function updateChart(dataSet) {
     .style('opacity', 0);
 
   /* configure the chart */
-  const barChart = svg
+  svg
     .selectAll('rect')
     .data(dataSet)
     .enter()
@@ -73,10 +71,10 @@ function updateChart(dataSet) {
     .attr('data-date', d => d[0])
     .attr('data-gdp', d => d[1]);
 
+  /* Show the tooltip when hovering */
   svg
     .selectAll('rect')
     .on('mouseover', d => {
-      /* Show the tooltip when hovering */
       const amount = d[1].toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD'
@@ -123,4 +121,20 @@ function updateChart(dataSet) {
       'translate(' + scalePadding + ', ' + (svgHeight - scalePadding) + ')'
     )
     .call(xAxis);
+
+  /* Axis descriptions */
+  svg
+    .append('text')
+    .attr('class', 'axis-description')
+    .text('More Information: http://www.bea.gov/national/pdf/nipaguid.pdf')
+    .attr('y', svgHeight - 5)
+    .attr('x', svgWidth - 387);
+
+  svg
+    .append('text')
+    .attr('class', 'axis-description')
+    .text('Gross Domestic Product')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -165)
+    .attr('y', 75);
 }

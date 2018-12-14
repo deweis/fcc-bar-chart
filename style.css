@@ -27,3 +27,8 @@ h1 {
   border-radius: 8px;
   pointer-events: none;
 }
+
+.axis-description {
+  font-size: 0.8em;
+  fill: #757575; /* grey darken-1 */
+}
