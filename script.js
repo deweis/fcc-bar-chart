@@ -1,3 +1,10 @@
+/*
+- fully understand the code
+- Add axis description
+- Add source information (on bottom right)
+- Make it responsive
+*/
+
 /********** Fetch the data to be visualized **********/
 fetch(
   'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json'
@@ -54,12 +61,20 @@ function updateChart(dataSet) {
     .append('rect') // The origin point of (0, 0) is in the upper-left corner.
     .attr('y', d => yScale(d[1])) // Positive values for y push the shape down from the origin point
     .attr('x', (d, i) => scalePadding + barWidth * i) // Positive values for x push the shape to the right
+    /* Add the transition 
+       thank you: https://codepen.io/HIC/full/JaaEOa/*/
+    .transition()
+    .duration(0)
+    .delay((d, i) => i * 10)
     .attr('width', barWidth - barPadding)
     .attr('height', d => svgHeight - yScale(d[1]) - scalePadding)
     .attr('fill', '#3949ab') //  The bar colors (Here: indigo darken-1)
     .attr('class', 'bar') // add hovering effect (managed in css)
     .attr('data-date', d => d[0])
-    .attr('data-gdp', d => d[1])
+    .attr('data-gdp', d => d[1]);
+
+  svg
+    .selectAll('rect')
     .on('mouseover', d => {
       /* Show the tooltip when hovering */
       const amount = d[1].toLocaleString('en-US', {
