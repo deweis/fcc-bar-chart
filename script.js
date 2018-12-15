@@ -14,6 +14,16 @@ fetch(
     updateChart(myJson.data);
   });
 
+/* Helper function to get the Quarter from a date string */
+function getQuarter(date) {
+  const year = date.substr(0, 4);
+  const month = Number(date.substr(5, 2));
+  const quarter =
+    month < 4 ? 'Q1' : month < 7 ? 'Q2' : month < 10 ? 'Q3' : 'Q4';
+
+  return `${year} ${quarter}`;
+}
+
 /********** Create the chart *********/
 function updateChart(dataSet) {
   const svgWidth = 940, // the width of the svg container
@@ -87,7 +97,7 @@ function updateChart(dataSet) {
         .style('opacity', 0.9);
 
       divTooltip
-        .html(`${d[0]} <br> ${amount} Billion`)
+        .html(`${getQuarter(d[0])} <br> ${amount} Billion`)
         .style('left', d3.event.pageX + 10 + 'px')
         .style('top', d3.event.pageY - 35 + 'px');
     })
