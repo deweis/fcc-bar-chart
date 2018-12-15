@@ -1,8 +1,3 @@
-/*
-- fully understand the code
-- Make it responsive
-*/
-
 /********** Fetch the data to be visualized **********/
 fetch(
   'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json'
@@ -26,8 +21,11 @@ function getQuarter(date) {
 
 /********** Create the chart *********/
 function updateChart(dataSet) {
+  //const windowWidth = document.getElementById('chartContainer').clientWidth;
+  //console.log('window width', windowWidth);
+
   const svgWidth = 940, // the width of the svg container
-    svgHeight = 600, // the height of the svg container
+    svgHeight = 550, // the height of the svg container
     barPadding = 1, // the padding between the bars
     scalePadding = 50, // the padding of the chart within the svg
     barWidth = (svgWidth - 1.2 * scalePadding) / dataSet.length; // give equal width to every bar based on the container width;
@@ -48,9 +46,13 @@ function updateChart(dataSet) {
 
   /* configure the svg container */
   const svg = d3
-    .select('svg')
+    .select('#chartContainer')
+    .append('svg')
+    .attr('id', 'chart')
     .attr('width', svgWidth)
-    .attr('height', svgHeight);
+    .attr('height', svgHeight)
+    .attr('viewBox', '0 0 ' + svgWidth + ' ' + svgHeight)
+    .attr('preserveAspectRatio', 'xMidYMid');
 
   /* Define the div for the tooltip 
       Thank you: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369  */
@@ -111,14 +113,14 @@ function updateChart(dataSet) {
 
   /* Configure the axes */
   const yAxis = d3.axisLeft(yScale);
-  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format(''));
+  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('')); // formatted as string
 
   /* Place the y-axis */
   svg
     .append('g')
     .attr('id', 'y-axis')
     .attr('class', 'axis')
-    .attr('transform', 'translate(' + scalePadding + ',0)')
+    .attr('transform', 'translate(' + scalePadding + ', 0)')
     .call(yAxis);
 
   /* Place the x-axis */
@@ -148,3 +150,21 @@ function updateChart(dataSet) {
     .attr('x', -165)
     .attr('y', 75);
 }
+
+/*
+  Make it responsive
+    Thank you: https://stackoverflow.com/a/9539361 resp. http://jsfiddle.net/shawnbot/BJLe6/
+*/
+$(function() {
+  const chart = $('#chart'),
+    aspect = chart.width() / chart.height(),
+    container = chart.parent();
+
+  $(window)
+    .on('resize', function() {
+      var targetWidth = container.width() > 980 ? 980 : container.width();
+      chart.attr('width', targetWidth);
+      chart.attr('height', Math.round(targetWidth / aspect));
+    })
+    .trigger('resize');
+});
