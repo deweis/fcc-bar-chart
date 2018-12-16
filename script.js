@@ -51,6 +51,10 @@ function updateChart(dataSet) {
     .attr('id', 'chart')
     .attr('width', svgWidth)
     .attr('height', svgHeight)
+    /*
+      Make it responsive
+        Thank you: https://stackoverflow.com/a/9539361 resp. http://jsfiddle.net/shawnbot/BJLe6/
+    */
     .attr('viewBox', '0 0 ' + svgWidth + ' ' + svgHeight)
     .attr('preserveAspectRatio', 'xMidYMid');
 
